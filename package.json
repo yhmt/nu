@@ -4,7 +4,7 @@
   "version": "0.0.2",
   "description": "",
   "url": "https://github.com/yhmt/nu",
-  "author": "Yuya Hashimoto",
+  "author": "@yuya",
   "license": "MIT",
   "main": "nu.js",
   "scripts": {

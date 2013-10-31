@@ -1,4 +1,4 @@
-// Nu 0.0.2 Copyright (c) 2013 Yuya Hashimoto
+// Nu 0.0.2 Copyright (C) 2013 @yuya, MIT License.
 // See https://github.com/yhmt/nu
 ;(function (global, document, undefined) {
 
