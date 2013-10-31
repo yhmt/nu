@@ -1,0 +1,26 @@
+{
+  "name": "nu",
+  "title": "Nu",
+  "version": "0.0.2",
+  "description": "",
+  "url": "https://github.com/yhmt/nu",
+  "author": "Yuya Hashimoto",
+  "license": "MIT",
+  "main": "nu.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/yhmt/nu.git"
+  },
+  "devDependencies": {
+    "matchdep": "~0.3.0",
+    "grunt": "~0.4.1",
+    "grunt-exec": "~0.4.2",
+    "grunt-este-watch": "~0.1.7",
+    "grunt-contrib-jshint": "~0.7.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.4"
+  }
+}
