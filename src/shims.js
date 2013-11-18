@@ -24,8 +24,8 @@ if (!Object.keys) {
 // Array.isArray
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
 if (!Array.isArray) {
-    Array.isArray = function (any) {
-        return Object.prototype.toString.call(any) === "[object Array]";
+    Array.isArray = function (obj) {
+        return Object.prototype.toString.call(obj) === "[object Array]";
     };
 }
 
@@ -43,7 +43,8 @@ function IEDOMContentLoaded() {
         (new Image()).doScroll();
         // return "DOMContentLoaded";
         return document.fireEvent("DOMContentLoaded", document.createEventObject());
-    } catch (err) {
+    }
+    catch (err) {
         setTimeout(IEDOMContentLoaded, 64);
     }
 }

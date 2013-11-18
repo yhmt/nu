@@ -1,19 +1,9 @@
-var Nu,
-    NS        = "Nu",
-    loaded    = false,
-    loadQueue = [],
-    div       = document.createElement("div"),
-    readyRe   = /complete|loaded|interactive/,
-    support   = {
-        touchEvent          : "ontouchstart"        in global,
-        addEventListener    : "addEventListener"    in global,
-        removeEventListener : "removeEventListener" in global,
-        orientationchange   : "onorientationchange" in global,
-        pageShow            : "onpageshow"          in global,
-        createEvent         : "createEvent"         in document,
-        classList           : !!div.classList
-    },
-    userAgent = (function () {
+var Nu, rootNu,
+    class2type = {},
+    loadQueue  = [],
+    isLoaded   = false,
+    domTester  = document.createElement("div"),
+    userAgent  = (function () {
         var ua           = navigator.userAgent.toLowerCase(),
             ios          = ua.match(/(?:iphone\sos|ip[oa]d.*os)\s([\d_]+)/),
             android      = ua.match(/(android)\s+([\d.]+)/),
@@ -55,12 +45,33 @@ var Nu,
             oldAndroid : isAndroid && platformVersion < 4
         };
     })(),
-    events    = {
+    support = {
+        touchEvent          : "ontouchstart"        in global,
+        addEventListener    : "addEventListener"    in global,
+        removeEventListener : "removeEventListener" in global,
+        orientationchange   : "onorientationchange" in global,
+        pageShow            : "onpageshow"          in global,
+        createEvent         : "createEvent"         in document,
+        classList           : !!domTester.classList
+    },
+    events = {
         touchstart        : support.touchEvent        ? "touchstart"        : "mousedown",
         touchmove         : support.touchEvent        ? "touchmove"         : "mousemove",
         touchend          : support.touchEvent        ? "touchend"          : "mouseup",
         orientationchange : support.orientationchange ? "orientationchange" : "resize",
         pageshow          : support.pageShow          ? "pageshow"          : this.domcontentloaded,
         domcontentloaded  : !userAgent.oldIE          ? "DOMContentLoaded"  : IEDOMContentLoaded()
-    }
+    },
+    addListener    = support.addEventListener    ? "addEventListener"    : "attachEvent",
+    removeListener = support.removeEventListener ? "removeEventListener" : "detachEvent",
+    AryProto       = Array.prototype,
+    ObjProto       = Object.prototype,
+    FuncProto      = Function.prototype,
+    push           = AryProto.push,
+    slice          = AryProto.slice,
+    concat         = AryProto.concat,
+    toString       = ObjProto.toString,
+    hasOwnProperty = ObjProto.hasOwnProperty,
+    readyRe        = /complete|loaded|interactive/,
+    qsaRe          = /^(.+[\#\.\s\[\*>:,]|[\[:])/
 ;

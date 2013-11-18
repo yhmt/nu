@@ -17,8 +17,11 @@ module.exports = (grunt) ->
             "src/intro.js"
             "src/shims.js"
             "src/variable.js"
-            "src/helper.js"
+            "src/type.js"
+            "src/utility.js"
             "src/nu.js"
+            "src/nu.extend.js"
+            "src/exports.js"
             "src/outro.js"
           ]
 
@@ -51,8 +54,10 @@ module.exports = (grunt) ->
           "latedef"
           "undef"
           "regexp"
-          "unused"
+          "proto"      # protoプロパティに警告を出さない
+          # "unused"   # 使用していない変数に警告を出す
           "loopfunc"
+          "laxcomma"  # カンマを最初にかくスタイルに警告を出さない
           # "trailing" # 行末のホワイトスペースを禁止
           "browser"
           "devel"
