@@ -99,6 +99,7 @@
                         touch.el.trigger("swipe");
                         touch.el.trigger("swipe" + swipeDirection(touch.x1, touch.x2,
                                                                   touch.y1, touch.y2));
+
                         resetTouch();
                     }, 0);
                 }
@@ -144,5 +145,5 @@
                 return this.on(event, callback);
             };
         });
-    });    
+    });
 })(this, this.document, this.Nu);

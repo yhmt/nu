@@ -81,6 +81,8 @@ var Nu, rootNu,
             android      = ua.match(/(android)\s+([\d.]+)/),
             isIOS        = !!ios,
             isAndroid    = !!android,
+            isWindows    = /windows/.test(ua),
+            isMacintosh  = /macintosh/.test(ua),
             checkBrowser = (function () {
                 var match = /(webkit)[ \/]([\w.]+)/.exec(ua)              ||
                             /(firefox)[ \/]([\w.]+)/.exec(ua)             ||
@@ -92,22 +94,28 @@ var Nu, rootNu,
                     version : parseFloat(match[2])
                 };
             })(),
+            deviceName   = isIOS || isAndroid ? "mobile" : "desktop",
             platformName = (function () {
-                if (support.touchEvent && (isIOS || isAndroid)) {
-                    return isIOS ? "ios" : "android";
-                }
-                else {
-                    return "desktop";
-                }
+                return  isIOS       ?
+                            "ios"     :
+                        isAndroid   ?
+                            "android" :
+                        isMacintosh ?
+                            "mac"     :
+                        isWindows   ?
+                            "windows" :
+                            "unknown"
+                ;
             })(),
             platformVersion = (function () {
-                return platformName !== "desktop" ?
+                return support.touchEvent && platformName !== "desktop" ?
                     parseFloat((ios || android).pop().split(/\D/).join(".")) :
                     null;
             })();
 
         return {
             platform : platformName,
+            device   : deviceName,
             browser  : checkBrowser.name,
             version  : {
                 os      : platformVersion,
@@ -999,6 +1007,7 @@ global.Nu = global.nu = Nu;
                         touch.el.trigger("swipe");
                         touch.el.trigger("swipe" + swipeDirection(touch.x1, touch.x2,
                                                                   touch.y1, touch.y2));
+
                         resetTouch();
                     }, 0);
                 }
@@ -1044,5 +1053,5 @@ global.Nu = global.nu = Nu;
                 return this.on(event, callback);
             };
         });
-    });    
+    });
 })(this, this.document, this.Nu);
