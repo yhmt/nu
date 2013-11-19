@@ -3,6 +3,15 @@ var Nu, rootNu,
     loadQueue  = [],
     isLoaded   = false,
     domTester  = document.createElement("div"),
+    support = {
+        touchEvent          : "ontouchstart"        in global,
+        addEventListener    : "addEventListener"    in global,
+        removeEventListener : "removeEventListener" in global,
+        orientationchange   : "onorientationchange" in global,
+        pageShow            : "onpageshow"          in global,
+        createEvent         : "createEvent"         in document,
+        classList           : !!domTester.classList
+    },
     userAgent  = (function () {
         var ua           = navigator.userAgent.toLowerCase(),
             ios          = ua.match(/(?:iphone\sos|ip[oa]d.*os)\s([\d_]+)/),
@@ -45,19 +54,11 @@ var Nu, rootNu,
             oldAndroid : isAndroid && platformVersion < 4
         };
     })(),
-    support = {
-        touchEvent          : "ontouchstart"        in global,
-        addEventListener    : "addEventListener"    in global,
-        removeEventListener : "removeEventListener" in global,
-        orientationchange   : "onorientationchange" in global,
-        pageShow            : "onpageshow"          in global,
-        createEvent         : "createEvent"         in document,
-        classList           : !!domTester.classList
-    },
     events = {
         touchstart        : support.touchEvent        ? "touchstart"        : "mousedown",
         touchmove         : support.touchEvent        ? "touchmove"         : "mousemove",
         touchend          : support.touchEvent        ? "touchend"          : "mouseup",
+        touchcancel       : support.touchEvent        ? "touchcancel"       : "mouseleave",
         orientationchange : support.orientationchange ? "orientationchange" : "resize",
         pageshow          : support.pageShow          ? "pageshow"          : this.domcontentloaded,
         domcontentloaded  : !userAgent.oldIE          ? "DOMContentLoaded"  : IEDOMContentLoaded()

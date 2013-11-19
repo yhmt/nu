@@ -23,6 +23,7 @@ module.exports = (grunt) ->
             "src/nu.extend.js"
             "src/exports.js"
             "src/outro.js"
+            "src/nu.touch.js"
           ]
 
     uglify:

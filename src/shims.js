@@ -5,6 +5,14 @@ if (!document.getElementsByClassName) {
     };
 }
 
+// Date.now
+// http://d.hatena.ne.jp/uupaa/20091223/1261528727
+if (!Date.now) {
+    Date.now = function (source) {
+        return +new Date();
+    };
+}
+
 // Object.keys
 // http://uupaa.hatenablog.com/entry/2012/02/04/145400
 if (!Object.keys) {

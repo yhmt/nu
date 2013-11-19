@@ -18,4 +18,12 @@ Nu.isRegExp      = isRegExp;
 Nu.isNodeList    = isNodeList;
 Nu.toArray       = toArray;
 
+Nu.support       = support;
+Nu.userAgent     = userAgent;
+Nu.events        = events;
+
+Nu.each          = each;
+Nu.match         = match;
+Nu.createEvent   = createEvent;
+
 global.Nu = global.nu = Nu;

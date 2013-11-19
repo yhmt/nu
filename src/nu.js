@@ -63,7 +63,7 @@ Nu.fn = Nu.prototype = {
             fn();
         }
         else {
-            this.bind(loadEvents, function () {
+            this.on(loadEvents, function () {
                 fn();
             });
         }
@@ -121,7 +121,7 @@ Nu.fn = Nu.prototype = {
         }
 
         function _bind(type, callback) {
-            callback = callback || fn;
+            callback = callback || selector;
 
             _this.each(function () {
                 this[addListener](type, callback);
@@ -192,7 +192,7 @@ Nu.fn = Nu.prototype = {
         }
 
         function _unbind(type, callback) {
-            callback = callback || fn;
+            callback = callback || selector;
 
             _this.each(function () {
                 this[removeListener](type, callback);
@@ -244,11 +244,16 @@ Nu.fn = Nu.prototype = {
         return this;
     },
     trigger: function (/* type[, data...] */) {
-        var args  = toArray(arguments),
-            type  = args.shift(),
-            event = support.createEvent ?
-                        document.createEvent("Event") :
-                        document.createEventObject();
+        var args = toArray(arguments),
+            type, event;
+
+        if (isString(args[0])) {
+            type  = args.shift();
+            event = createEvent(type);
+        }
+        else {
+            event = args.shift();
+        }
 
         if (args.length) {
             event._data = args;
@@ -256,14 +261,13 @@ Nu.fn = Nu.prototype = {
 
         if (support.createEvent) {
             this.each(function () {
-                event.initEvent(type, true, true);
                 this.dispatchEvent(event);
             });
         }
         else {
-            this.each(function () {
-                event.fireEvent(type, event);
-            });
+            // this.each(function () {
+            //     event.fireEvent(type, event);
+            // });
         }
 
         return this;
