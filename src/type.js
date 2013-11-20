@@ -63,39 +63,3 @@ function isNodeList(obj) {
 
     return type === "[object NodeList]" || type === "[object HTMLCollection]";
 }
-
-function fixEvent(event) {
-    var prevent;
-
-    if (!("defaultPrevented" in event)) {
-        prevent = event.preventDefault;
-
-        event.defaultPrevented = false;
-        event.preventDefault   = function () {
-            this.defaultPrevented = true;
-            prevent.call(this);
-        };
-    }
-
-    return event;
-}
-
-function createEvent(type) {
-    var event;
-
-    if (support.createEvent) {
-        event = document.createEvent("Event");
-
-        event.initEvent(type, true, true, null, null, null, null, null, null, null, null, null, null, null, null);
-    }
-    else {
-         event = document.createEventObject();
-    }
-
-    event.isDefaultPrevented = function () {
-        return this.defaultPrevented;
-    };
-
-    return fixEvent(event);
-    // return event;
-}

@@ -37,6 +37,33 @@ if (!Array.isArray) {
     };
 }
 
+// Function.prototype.bind
+// https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
+if (!Function.prototype.bind) {
+    Function.prototype.bind = function (obj) {
+        if (typeof this !== "function") {
+            throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+        }
+        var slice  = [].slice,
+            args   = slice.call(arguments, 1),
+            method = this,
+            func   = function () {},
+            bound  = function () {
+                return method.apply(
+                        this instanceof func ?
+                            this : obj || window,
+                        args.concat(slice.call(arguments))
+                );
+            }
+        ;
+
+        func.prototype  = this.prototype;
+        bound.prototype = new func();
+
+        return bound;
+    };
+}
+
 // String.prototype.trim
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
 // if (!String.prototype.trim) {

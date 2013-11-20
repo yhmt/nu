@@ -74,3 +74,56 @@ function returnTrue() {
 function returnFalse() {
     return false;
 }
+
+function fixEvent(event) {
+    var prevent;
+
+    if (!("defaultPrevented" in event)) {
+        prevent = event.preventDefault;
+
+        event.defaultPrevented = false;
+        event.preventDefault   = function () {
+            this.defaultPrevented = true;
+            prevent.call(this);
+        };
+    }
+
+    return event;
+}
+
+function createEvent(type) {
+    var event;
+
+    if (support.createEvent) {
+        event = document.createEvent("Event");
+
+        event.initEvent(type, true, true, null, null, null, null, null, null, null, null, null, null, null, null);
+    }
+    else {
+         event = document.createEventObject();
+    }
+
+    event.isDefaultPrevented = function () {
+        return this.defaultPrevented;
+    };
+
+    return fixEvent(event);
+    // return event;
+}
+
+function has(obj, key) {
+    return hasOwnProperty.call(obj, key);
+}
+
+function pick(obj) {
+    var copy = {},
+        keys = concat.apply(AryProto, slice.call(arguments, 1));
+
+    each(keys, function (key) {
+        each(key, function (k) {
+            copy[k] = obj[k];
+        });
+    });
+
+    return copy;
+}
