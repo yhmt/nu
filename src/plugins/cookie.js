@@ -1,59 +1,59 @@
 ;(function (global, document, nu) {
-    var cookie = {
-        raw : false
-    };
-
-    function encode(str) {
-        return cookie.raw ? str : encodeURIComponent(str);
+    function Cookie(config) {
+        this.config = nu.extend(config || {}, { raw : false });
     }
 
-    function decode(str) {
-        return cookie.raw ? str : decodeURIComponent(str);
-    }
+    Cookie.prototype = {
+        get: function (key) {
+            var self    = this,
+                cookies = document.cookie ? document.cookie.split("; ") : [],
+                parts, name, value, ret;
 
-    cookie.get = function (key, callback) {
-        var cookies = document.cookie ? document.cookie.split("; ") : [],
-            parts, name, value, ret;
+            nu.each(cookies, function (str) {
+                parts = str.split("=");
+                name  = self._decode(parts[0]);
+                value = parts[1];
 
-        nu.each(cookies, function (str) {
-            parts = str.split("=");
-            name  = decode(parts[0]);
-            value = parts[1];
+                if (key && key === name) {
+                    ret = self._decode(value);
+                }
+            });
 
-            if (key && key === name) {
-                ret = decode(value);
+            return ret;
+        },
+        set: function (key, value, options) {
+            options = options || {};
+            var self = this,
+                days, time;
+
+            if (nu.isNumber(options.expires)) {
+                days = options.expires;
+                time = options.expires = new Date();
+
+                time.setTime(+time + days * 864e+5);
             }
-        });
 
-        return ret;
-    };
+            return (document.cookie = [
+                self._encode(key) + "=" + value,
+                options.expires ? "; expires=" + options.expires.toUTCString() : "",
+                options.path    ? "; path="    + options.path                  : "",
+                options.domain  ? "; domain="  + options.domain                : "",
+                options.secure  ? "; secure"                                   : ""
+            ].join(""));
+        },
+        remove: function (key, options) {
+            options = nu.extend(options || {}, { expires: -1 });
+            this.set(key, "", options);
 
-    cookie.set = function (key, value, options) {
-        options = options || {};
-        var days, time;
-
-        if (nu.isNumber(options.expires)) {
-            days = options.expires;
-            time = options.expires = new Date();
-
-            time.setTime(+time + days * 864e+5);
+            return !this.get(key);
+        },
+        _encode: function (str) {
+            return this.config.raw ? str : encodeURIComponent(str);
+        },
+        _decode: function (str) {
+            return this.config.raw ? str : decodeURIComponent(str);
         }
-
-        return (document.cookie = [
-            encode(key) + "=" + value,
-            options.expires ? "; expires=" + options.expires.toUTCString() : "",
-            options.path    ? "; path="    + options.path                  : "",
-            options.domain  ? "; domain="  + options.domain                : "",
-            options.secure  ? "; secure"                                   : ""
-        ].join(""));
     };
 
-    cookie.remove = function (key, options) {
-        options = nu.extend(options || {}, { expires: -1 });
-        cookie.set(key, "", options);
-
-        return !cookie.get(key);
-    };
-
-    nu.cookie = cookie;
+    nu.cookie = Cookie;
 })(this, this.document, this.Nu);
