@@ -1,42 +1,48 @@
 ;(function (global, document, nu) {
-    function UnityWebMediator() {
-        var platform = nu.userAgent.platform,
-            ios      = platform === ios,
-            android  = platform === android,
-            mac      = platform === mac,
-            message, stack, keys, key, i, len;
+    var URL_SCHEME = "webviewbridge://",
+        platform   = nu.userAgent.platform,
+        isAndroid  = platform === android,
+        body       = document.body,
+        iframeBase = document.createElement("iframe"),
+        iframe;
 
-        this.messageQueue = []; 
+    function callCustomURLScheme() {
+        iframe     = iframeBase.cloneNode(false);
+        iframe.src = URL_SCHEME;
 
-        this.callback     = function (path, args) {
-            message = path;
+        body.appendChild(iframe);
+        body.removeChild(iframe);
+
+        iframe = null;
+    }
+
+    function WebViewMediator() {
+        var message, stack;
+
+        this.queue   = [];
+        this.command = function (path, args) {
+            message = isAndroid ? URL_SCHEME + path : path;
 
             if (args) {
                 stack = [];
 
-                Nu.each(args, function (key) {
+                nu.each(args, function (key) {
                     stack.push(key + "=" + encodeURIComponent(args[key]));
                 });
 
                 message += "?" + stack.join("&");
             }
 
-            if (ios || mac) {
-                this.messageQueue.push(message);
-            }
-            else if (android) {
-                UnityInterface.pushMessage(message);
-            }
-            else {
-                console.log(message);
-            }
+            this.queue.push(message);
+            callCustomURLScheme();
         };
 
-        this.pollMessage  = function () {
-            return this.messageQueue.shift();
+        this.callMessage = function () {
+            return this.queue.shift();
         };
+
+        global.WebViewMediatorInstance = this;
     }
 
-    global.unityWebMediatorInstance = nu.fn.unity = UnityWebMediator;
-
+    nu.unity = new WebViewMediator();
 })(this, this.document, this.Nu);

@@ -1,14 +1,14 @@
-;(function (global, document, Nu) {
+;(function (global, document, nu) {
     var touch        = {},
         events       = [
-            "swipe"     , "swipeleft" , "swiperight" , "swipeup" , "swipedown" , 
+            "swipe"     , "swipeleft" , "swiperight" , "swipeup" , "swipedown" ,
             "doubletap" , "tap"       , "singletap"  , "longtap"
         ],
-        hasTouch     = Nu.support.touchEvent,
-        touchstart   = Nu.events.touchstart,
-        touchmove    = Nu.events.touchmove,
-        touchend     = Nu.events.touchend,
-        touchcancel  = Nu.events.touchcancel,
+        hasTouch     = nu.support.touchEvent,
+        touchstart   = nu.events.touchstart,
+        touchmove    = nu.events.touchmove,
+        touchend     = nu.events.touchend,
+        touchcancel  = nu.events.touchcancel,
         longTapDelay = 750,
         touchTimeout, tapTimeout, swipeTimeout, longTapTimeout;
 
@@ -41,7 +41,7 @@
     }
 
     function cancelAll() {
-        Nu.each([touchTimeout, tapTimeout, swipeTimeout, longTapTimeout], function (iterator) {
+        nu.each([touchTimeout, tapTimeout, swipeTimeout, longTapTimeout], function (iterator) {
             if (iterator) {
                 clearTimeout(iterator);
             }
@@ -56,14 +56,14 @@
             deltaY = 0,
             firstTouch, now, delta, target, tapEvent;
 
-        Nu(document)
+        nu(document)
             .on(touchstart, function (event) {
                 firstTouch = hasTouch ? event.touches[0] : event;
                 now        = Date.now();
                 delta      = now - (touch.last || now);
                 target     = "tagName" in firstTouch.target ?
                                  firstTouch.target : firstTouch.target.parentNode;
-                touch.el   = Nu(target);
+                touch.el   = nu(target);
 
                 if (touchTimeout) {
                     clearTimeout(touchTimeout);
@@ -85,7 +85,7 @@
 
                 touch.x2 = firstTouch.pageX;
                 touch.y2 = firstTouch.pageY;
-                
+
                 deltaX   += Math.abs(touch.x1 - touch.x2);
                 deltaX   += Math.abs(touch.y1 - touch.y2);
             })
@@ -106,7 +106,7 @@
                 else if ("last" in touch) {
                     if (deltaX < 30 && deltaY < 30) {
                         tapTimeout = setTimeout(function () {
-                            tapEvent             = Nu.createEvent("tap");
+                            tapEvent             = nu.createEvent("tap");
                             tapEvent.cancelTouch = cancelAll;
 
                             touch.el.trigger(tapEvent);
@@ -134,14 +134,14 @@
             .on(touchcancel, cancelAll)
         ;
 
-        Nu(window).on("scroll", cancelAll);
+        nu(window).on("scroll", cancelAll);
     }
 
-    Nu(function () {
+    nu(function () {
         touchHandler();
 
-        Nu.each(events, function(event) {
-            Nu.fn[event] = function (callback) {
+        nu.each(events, function(event) {
+            nu.fn[event] = function (callback) {
                 return this.on(event, callback);
             };
         });

@@ -8,7 +8,7 @@ if (!document.getElementsByClassName) {
 // Date.now
 // http://d.hatena.ne.jp/uupaa/20091223/1261528727
 if (!Date.now) {
-    Date.now = function (source) {
+    Date.now = function () {
         return +new Date();
     };
 }

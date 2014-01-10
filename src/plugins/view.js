@@ -1,8 +1,8 @@
-;(function (global, document, Nu) {
+;(function (global, document, nu) {
     var idCounter       = 0,
         delegateEventRe = /^(\S+)\s*(.*)$/,
         viewOptions     = [
-            "model"      , "collection" , "el"      , "id"     , 
+            "model"      , "collection" , "el"      , "id"     ,
             "attributes" , "className"  , "tagName" , "events"
         ];
 
@@ -16,7 +16,7 @@
         var parent = this,
             child, surrogate;
 
-        if (protoProps && Nu.has(protoProps, "constructor")) {
+        if (protoProps && nu.has(protoProps, "constructor")) {
             child = protoProps.constructor;
         }
         else {
@@ -25,7 +25,7 @@
             };
         }
 
-        Nu.extend(child, parent, staticProps);
+        nu.extend(child, parent, staticProps);
 
         surrogate = function () {
             this.constructor = child;
@@ -35,7 +35,7 @@
         child.prototype     = new surrogate();
 
         if (protoProps) {
-            Nu.extend(child.prototype, protoProps);
+            nu.extend(child.prototype, protoProps);
         }
 
         child.__super__ = parent.prototype;
@@ -47,7 +47,7 @@
         options  = options || {};
         this.cid = uniqueId("view_");
 
-        Nu.extend(this, Nu.pick(options, viewOptions));
+        nu.extend(this, nu.pick(options, viewOptions));
 
         this._ensureElement();
         this.initialize.apply(this, arguments);
@@ -71,7 +71,7 @@
                 this.undelegateEvents();
             }
 
-            this.el = Nu(element);
+            this.el = nu(element);
 
             if (delegate !== false) {
                 this.delegateEvents();
@@ -86,14 +86,14 @@
                 return this;
             }
 
-            Nu.each(events, function (key, value) {
-                method = !Nu.isFunction(events[key]) ? this[events[key]] : events[key];
+            nu.each(events, function (key, value) {
+                method = !nu.isFunction(events[key]) ? this[events[key]] : events[key];
 
                 if (method) {
                     match     = key.match(delegateEventRe);
                     eventName = match[1];
                     selector  = match[2];
-                    
+
                     method    = method.bind(this);
                     eventName += ".delegateEvents" + this.cid;
 
@@ -118,7 +118,7 @@
 
             if (!this.el) {
                 element = document.createElement(this.tagName);
-                attrs   = Nu.extend({}, this.attributes);
+                attrs   = nu.extend({}, this.attributes);
 
                 if (this.id) {
                     attrs.id = this.id;
@@ -127,7 +127,7 @@
                     attrs["class"] = this.className;
                 }
 
-                this.el = Nu(element).attr(attrs);
+                this.el = nu(element).attr(attrs);
                 this.setElement(this.el, false);
             }
             else {
@@ -137,5 +137,5 @@
     };
 
     View.extend = extend;
-    Nu.fn.view  = View;
+    nu.view     = View;
 })(this, this.document, this.Nu);

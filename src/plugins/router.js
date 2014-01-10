@@ -41,6 +41,5 @@
         }
     };
 
-    nu.fn.router = Router;
-
+    nu.router = Router;
 })(this, this.document, this.Nu);
