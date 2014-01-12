@@ -119,11 +119,34 @@ function pick(obj) {
     var copy = {},
         keys = concat.apply(AryProto, slice.call(arguments, 1));
 
+    // // console.log(concat.apply(AryProto, slice.call(arguments, 1)));
+    // // console.log(keys);
+
+    // // console.log(keys)
     each(keys, function (key) {
-        each(key, function (k) {
-            copy[k] = obj[k];
-        });
+        // console.log(key)
+        // copy[key] = "hoge";
+        // console.log(copy[key]);
+        // console.log(obj[key]);
+        if (key in obj) {
+            copy[key] = obj[key];
+        }
     });
+    // each(keys, function (key) {
+    //     each(key, function (k) {
+    //         copy[k] = obj[k];
+    //     });
+    // });
+    console.log(copy);
 
     return copy;
+}
+
+function result(obj, prop) {
+    if (obj == null) {
+        return void 0;
+    }
+    var value = obj[prop];
+
+    return Nu.isFunction(value) ? value.call(obj) : value;
 }

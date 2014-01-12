@@ -44,11 +44,15 @@
     }
 
     function View(options) {
-        options  = options || {};
-        this.cid = uniqueId("view_");
+        options      = options || {};
+        this.cid     = uniqueId("view_");
+        this._events = [];
 
+        // console.log(viewOptions);
+        // console.log(nu.pick(options, viewOptions));
+        // console.log(nu.pick(options));
         nu.extend(this, nu.pick(options, viewOptions));
-
+        // console.log(nu.pick(options, viewOptions));
         this._ensureElement();
         this.initialize.apply(this, arguments);
         this.delegateEvents();
@@ -80,28 +84,32 @@
             return this;
         },
         delegateEvents: function (events) {
-            var method, match, eventName, selector;
+            events = events || nu.result(this, "events");
 
             if (!events) {
                 return this;
             }
 
+            var self = this,
+                method, match, eventName, selector;
+
             nu.each(events, function (key, value) {
-                method = !nu.isFunction(events[key]) ? this[events[key]] : events[key];
+                method = !nu.isFunction(events[key]) ? self[events[key]] : events[key];
 
                 if (method) {
                     match     = key.match(delegateEventRe);
                     eventName = match[1];
                     selector  = match[2];
+                    method    = method.bind(self);
 
-                    method    = method.bind(this);
-                    eventName += ".delegateEvents" + this.cid;
+                    self._events.push(eventName);
+                    // eventName += ".delegateEvents" + self.cid;
 
                     if (selector === "") {
-                        this.el.on(eventName, method);
+                        self.el.on(eventName, method);
                     }
                     else {
-                        this.el.on(eventName, selector, method);
+                        self.el.on(eventName, selector, method);
                     }
                 }
             });
@@ -109,7 +117,8 @@
             return this;
         },
         undelegateEvents: function () {
-            this.el.off(".delegateEvents" + this.cid);
+            // this.el.off(".delegateEvents" + this.cid);
+            // this.el.off(this._events.join(" "));
 
             return this;
         },

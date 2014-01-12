@@ -44,5 +44,5 @@
         global.WebViewMediatorInstance = this;
     }
 
-    nu.unity = new WebViewMediator();
+    nu.unity = WebViewMediator();
 })(this, this.document, this.Nu);

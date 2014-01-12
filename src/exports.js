@@ -25,5 +25,8 @@ Nu.events        = events;
 Nu.each          = each;
 Nu.match         = match;
 Nu.createEvent   = createEvent;
+Nu.has           = has;
+Nu.pick          = pick;
+Nu.result        = result;
 
 global.Nu = global.nu = Nu;

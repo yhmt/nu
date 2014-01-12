@@ -1,4 +1,4 @@
-// Nu 0.0.3 Copyright (C) 2013 @yuya, MIT License.
+// Nu 0.0.3 Copyright (C) 2014 @yuya, MIT License.
 // See https://github.com/yhmt/nu
 ;(function (global, document, undefined) {
 
@@ -362,13 +362,36 @@ function pick(obj) {
     var copy = {},
         keys = concat.apply(AryProto, slice.call(arguments, 1));
 
+    // // console.log(concat.apply(AryProto, slice.call(arguments, 1)));
+    // // console.log(keys);
+
+    // // console.log(keys)
     each(keys, function (key) {
-        each(key, function (k) {
-            copy[k] = obj[k];
-        });
+        // console.log(key)
+        // copy[key] = "hoge";
+        // console.log(copy[key]);
+        // console.log(obj[key]);
+        if (key in obj) {
+            copy[key] = obj[key];
+        }
     });
+    // each(keys, function (key) {
+    //     each(key, function (k) {
+    //         copy[k] = obj[k];
+    //     });
+    // });
+    console.log(copy);
 
     return copy;
+}
+
+function result(obj, prop) {
+    if (obj == null) {
+        return void 0;
+    }
+    var value = obj[prop];
+
+    return Nu.isFunction(value) ? value.call(obj) : value;
 }
 
 Nu = function (selector, context) {
@@ -952,6 +975,9 @@ Nu.events        = events;
 Nu.each          = each;
 Nu.match         = match;
 Nu.createEvent   = createEvent;
+Nu.has           = has;
+Nu.pick          = pick;
+Nu.result        = result;
 
 global.Nu = global.nu = Nu;
 
