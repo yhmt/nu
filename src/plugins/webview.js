@@ -1,7 +1,7 @@
 ;(function (global, document, nu) {
     var URL_SCHEME = "webviewbridge://",
         platform   = nu.userAgent.platform,
-        isAndroid  = platform === android,
+        isAndroid  = platform === "android",
         body       = document.body,
         iframeBase = document.createElement("iframe"),
         iframe;
@@ -44,5 +44,5 @@
         global.WebViewMediatorInstance = this;
     }
 
-    nu.unity = WebViewMediator();
+    nu.webview = WebViewMediator;
 })(this, this.document, this.Nu);
