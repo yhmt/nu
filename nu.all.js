@@ -1,4 +1,4 @@
-// Nu 0.0.3 Copyright (C) 2014 @yuya, MIT License.
+// Nu 0.0.3 Copyright (C) 2016 @yuya, MIT License.
 // See https://github.com/yhmt/nu
 ;(function (global, document, undefined) {
 
@@ -135,7 +135,7 @@ var Nu, rootNu,
                 ;
             })(),
             platformVersion = (function () {
-                return support.touchEvent && platformName !== "desktop" ?
+                return support.touchEvent && deviceName !== "desktop" ?
                     parseFloat((ios || android).pop().split(/\D/).join(".")) :
                     null;
             })();
