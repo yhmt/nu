@@ -45,7 +45,7 @@ var Nu, rootNu,
                 ;
             })(),
             platformVersion = (function () {
-                return support.touchEvent && platformName !== "desktop" ?
+                return support.touchEvent && deviceName !== "desktop" ?
                     parseFloat((ios || android).pop().split(/\D/).join(".")) :
                     null;
             })();
